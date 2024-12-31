@@ -1212,7 +1212,6 @@ function library:SaveConfig(name, universal)
         local configtbl = {}
         local placeid = universal and "universal" or game.PlaceId
 
-        -- Iterar pelas flags e adicionar no config
         for flag, _ in next, flags do
             if not table.find(configignores, flag) then
                 local value = library.flags[flag]
@@ -1227,16 +1226,13 @@ function library:SaveConfig(name, universal)
             end
         end
 
-        -- Codificar as configurações para JSON
         local config = services.HttpService:JSONEncode(configtbl)
         local folderpath = string.format("%s//%s", self.folder, placeid)
 
-        -- Criar o diretório, caso não exista
         if not isfolder(folderpath) then 
             makefolder(folderpath) 
         end
 
-        -- Salvar o arquivo
         local filepath = string.format("%s//%s.%s", folderpath, name, self.extension)
         writefile(filepath, config)
     else
@@ -1306,6 +1302,7 @@ function library:GetConfigs(universal)
 
     return configs
 end
+
 -- config end
 function library:Close()
     self.open = not self.open
