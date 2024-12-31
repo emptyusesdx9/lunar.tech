@@ -1227,7 +1227,9 @@ function library:SaveConfig(name, universal)
         end
 
         local config = services.HttpService:JSONEncode(configtbl)
-        local folderpath = string.format("%s//%s", self.folder, placeid)
+        
+        -- Caminho correto para a pasta lunar.tech
+        local folderpath = string.format("%s//lunar.tech//%s", self.folder, placeid)
 
         if not isfolder(folderpath) then 
             makefolder(folderpath) 
@@ -1249,7 +1251,7 @@ function library:DeleteConfig(name, universal)
     assert(self.extension, "No file extension specified")
 
     local placeid = universal and "universal" or game.PlaceId
-    local folderpath = string.format("%s//%s", self.folder, placeid)
+    local folderpath = string.format("%s//lunar.tech//%s", self.folder, placeid)
     local filepath = string.format("%s//%s.%s", folderpath, name, self.extension)
 
     if isfolder(folderpath) and isfile(filepath) then  
@@ -1263,7 +1265,7 @@ function library:LoadConfig(name, universal)
         assert(self.extension, "No file extension specified")
 
         local placeid = universal and "universal" or game.PlaceId
-        local folderpath = string.format("%s//%s", self.folder, placeid)
+        local folderpath = string.format("%s//lunar.tech//%s", self.folder, placeid)
         local filepath = string.format("%s//%s.%s", folderpath, name, self.extension)
 
         if isfolder(folderpath) and isfile(filepath) then  
@@ -1285,8 +1287,8 @@ function library:GetConfigs(universal)
     assert(self.extension, "No file extension specified")
 
     local configs = {}
-    local placeidfolder = string.format("%s//%s", self.folder, game.PlaceId)
-    local universalfolder = self.folder .. "//universal"
+    local placeidfolder = string.format("%s//lunar.tech//%s", self.folder, game.PlaceId)
+    local universalfolder = self.folder .. "//lunar.tech//universal"
 
     for _, config in next, (isfolder(placeidfolder) and listfiles(placeidfolder) or {}) do
         local name = config:gsub(placeidfolder .. "\\", ""):gsub("%." .. self.extension, "")
@@ -1302,7 +1304,6 @@ function library:GetConfigs(universal)
 
     return configs
 end
-
 -- config end
 function library:Close()
     self.open = not self.open
