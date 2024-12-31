@@ -1228,13 +1228,13 @@ function library:SaveConfig(name, universal)
 
         local config = services.HttpService:JSONEncode(configtbl)
         
-        local folderpath = string.format("%s//lunar.techV1//%s", self.folder, placeid)
+        local folderpath = self.folder and self.folder .. "\\lunar.techV1\\" .. placeid or "lunar.techV1\\" .. placeid
 
         if not isfolder(folderpath) then 
             makefolder(folderpath) 
         end
 
-        local filepath = string.format("%s//%s.%s", folderpath, name, self.extension)
+        local filepath = folderpath .. "\\" .. name .. "." .. self.extension
         writefile(filepath, config)
     else
         return false, "improper name"
@@ -1250,8 +1250,8 @@ function library:DeleteConfig(name, universal)
     assert(self.extension, "No file extension specified")
 
     local placeid = universal and "universal" or game.PlaceId
-    local folderpath = string.format("%s//lunar.techV1//%s", self.folder, placeid)
-    local filepath = string.format("%s//%s.%s", folderpath, name, self.extension)
+    local folderpath = self.folder and self.folder .. "\\lunar.techV1\\" .. placeid or "lunar.techV1\\" .. placeid
+    local filepath = folderpath .. "\\" .. name .. "." .. self.extension
 
     if isfolder(folderpath) and isfile(filepath) then  
         delfile(filepath)
@@ -1264,8 +1264,8 @@ function library:LoadConfig(name, universal)
         assert(self.extension, "No file extension specified")
 
         local placeid = universal and "universal" or game.PlaceId
-        local folderpath = string.format("%s//lunar.techV1//%s", self.folder, placeid)
-        local filepath = string.format("%s//%s.%s", folderpath, name, self.extension)
+        local folderpath = self.folder and self.folder .. "\\lunar.techV1\\" .. placeid or "lunar.techV1\\" .. placeid
+        local filepath = folderpath .. "\\" .. name .. "." .. self.extension
 
         if isfolder(folderpath) and isfile(filepath) then  
             local file = readfile(filepath)
@@ -1286,8 +1286,8 @@ function library:GetConfigs(universal)
     assert(self.extension, "No file extension specified")
 
     local configs = {}
-    local placeidfolder = string.format("%s//lunar.techV1//%s", self.folder, game.PlaceId)
-    local universalfolder = self.folder .. "//lunar.techV1//universal"
+    local placeidfolder = self.folder and self.folder .. "\\lunar.techV1\\" .. game.PlaceId or "lunar.techV1\\" .. game.PlaceId
+    local universalfolder = self.folder and self.folder .. "\\lunar.techV1\\universal" or "lunar.techV1\\universal"
 
     for _, config in next, (isfolder(placeidfolder) and listfiles(placeidfolder) or {}) do
         local name = config:gsub(placeidfolder .. "\\", ""):gsub("%." .. self.extension, "")
